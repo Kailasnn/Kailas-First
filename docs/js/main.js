@@ -312,17 +312,26 @@ setTimeout(function revealFallback() {
 
   let mouseX = 0, mouseY = 0;
   let outX = 0, outY = 0;
+  let hasMoved = false;
 
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
+    if (!hasMoved) {
+      outX = mouseX; outY = mouseY; // prevent fly-in from corner
+      dot.style.opacity = 1;
+      outline.style.opacity = 1;
+      hasMoved = true;
+    }
+    dot.style.transform = `translate3d(${mouseX - 4}px, ${mouseY - 4}px, 0)`;
   });
 
   // Laggy outline
   (function animateOutline() {
-    outX += (mouseX - outX) * 0.16;
-    outY += (mouseY - outY) * 0.16;
-    outline.style.transform = `translate3d(calc(${outX}px - 50%), calc(${outY}px - 50%), 0)`;
+    if (hasMoved) {
+      outX += (mouseX - outX) * 0.16;
+      outY += (mouseY - outY) * 0.16;
+      outline.style.transform = `translate3d(${outX - 18}px, ${outY - 18}px, 0)`;
+    }
     requestAnimationFrame(animateOutline);
   })();
 

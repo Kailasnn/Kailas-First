@@ -61,14 +61,23 @@ const API_BASE = (() => {
   const outline = document.getElementById('cursorOutline');
   if (!dot || !outline) return;
   let mouseX = 0, mouseY = 0, outX = 0, outY = 0;
+  let hasMoved = false;
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
+    if (!hasMoved) {
+      outX = mouseX; outY = mouseY;
+      dot.style.opacity = 1;
+      outline.style.opacity = 1;
+      hasMoved = true;
+    }
+    dot.style.transform = `translate3d(${mouseX - 4}px, ${mouseY - 4}px, 0)`;
   });
   (function animateOutline() {
-    outX += (mouseX - outX) * 0.16;
-    outY += (mouseY - outY) * 0.16;
-    outline.style.transform = `translate3d(calc(${outX}px - 50%), calc(${outY}px - 50%), 0)`;
+    if (hasMoved) {
+      outX += (mouseX - outX) * 0.16;
+      outY += (mouseY - outY) * 0.16;
+      outline.style.transform = `translate3d(${outX - 18}px, ${outY - 18}px, 0)`;
+    }
     requestAnimationFrame(animateOutline);
   })();
   document.querySelectorAll('a, button, .achievement-card, .cert-item, .filter-btn').forEach(el => {
