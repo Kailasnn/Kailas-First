@@ -56,7 +56,7 @@ setTimeout(function revealFallback() {
   scene.add(vinylGroup);
 
   // Main disc
-  const discGeo  = new THREE.CylinderGeometry(1.8, 1.8, 0.06, 80);
+  const discGeo  = new THREE.CylinderGeometry(1.8, 1.8, 0.06, 48);
   const discMat  = new THREE.MeshStandardMaterial({
     color: 0x1a0a2e,
     roughness: 0.3,
@@ -71,7 +71,7 @@ setTimeout(function revealFallback() {
   const grooveCount = 12;
   for (let i = 0; i < grooveCount; i++) {
     const r = 0.55 + (i / grooveCount) * 1.15;
-    const grooveGeo = new THREE.TorusGeometry(r, 0.006, 8, 120);
+    const grooveGeo = new THREE.TorusGeometry(r, 0.006, 4, 48);
     const grooveMat = new THREE.MeshStandardMaterial({ color: 0x6a0dad, roughness: 0.2, metalness: 0.9 });
     const groove = new THREE.Mesh(grooveGeo, grooveMat);
     groove.rotation.x = Math.PI / 2;
@@ -79,7 +79,7 @@ setTimeout(function revealFallback() {
   }
 
   // Center label
-  const labelGeo = new THREE.CylinderGeometry(0.45, 0.45, 0.07, 60);
+  const labelGeo = new THREE.CylinderGeometry(0.45, 0.45, 0.07, 32);
   const labelMat = new THREE.MeshStandardMaterial({
     color: 0x9b5de5,
     emissive: 0xc77dff,
@@ -203,7 +203,7 @@ setTimeout(function revealFallback() {
   }
 
   // ── Torus (Orbit Ring) ───────────────────────────────
-  const torusGeo = new THREE.TorusGeometry(2.2, 0.025, 16, 100);
+  const torusGeo = new THREE.TorusGeometry(2.2, 0.025, 8, 64);
   const torusMat = new THREE.MeshStandardMaterial({
     color: 0x6a0dad,
     emissive: 0x9b5de5,
@@ -315,16 +315,14 @@ setTimeout(function revealFallback() {
 
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
+    dot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
   });
 
   // Laggy outline
   (function animateOutline() {
-    outX += (mouseX - outX) * 0.12;
-    outY += (mouseY - outY) * 0.12;
-    outline.style.left = outX + 'px';
-    outline.style.top  = outY + 'px';
+    outX += (mouseX - outX) * 0.16;
+    outY += (mouseY - outY) * 0.16;
+    outline.style.transform = `translate3d(calc(${outX}px - 50%), calc(${outY}px - 50%), 0)`;
     requestAnimationFrame(animateOutline);
   })();
 
@@ -344,11 +342,6 @@ setTimeout(function revealFallback() {
   const navLinks  = document.getElementById('navLinks');
 
   if (!navbar) return;
-
-  // Scroll effect
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 60);
-  });
 
   // Hamburger toggle
   if (hamburger && navLinks) {
@@ -370,15 +363,26 @@ setTimeout(function revealFallback() {
   const sections  = document.querySelectorAll('section[id]');
   const navLinkEls = document.querySelectorAll('.nav-link');
 
+  let isScrolling = false;
   window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(sec => {
-      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
-    });
-    navLinkEls.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-    });
+    if (!isScrolling) {
+      window.requestAnimationFrame(() => {
+        // Navbar background
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+
+        // Active link highlighting
+        let current = '';
+        sections.forEach(sec => {
+          if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+        });
+        navLinkEls.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+        });
+        isScrolling = false;
+      });
+      isScrolling = true;
+    }
   });
 })();
 

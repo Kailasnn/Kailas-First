@@ -63,14 +63,12 @@ const API_BASE = (() => {
   let mouseX = 0, mouseY = 0, outX = 0, outY = 0;
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top = mouseY + 'px';
+    dot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
   });
   (function animateOutline() {
-    outX += (mouseX - outX) * 0.12;
-    outY += (mouseY - outY) * 0.12;
-    outline.style.left = outX + 'px';
-    outline.style.top = outY + 'px';
+    outX += (mouseX - outX) * 0.16;
+    outY += (mouseY - outY) * 0.16;
+    outline.style.transform = `translate3d(calc(${outX}px - 50%), calc(${outY}px - 50%), 0)`;
     requestAnimationFrame(animateOutline);
   })();
   document.querySelectorAll('a, button, .achievement-card, .cert-item, .filter-btn').forEach(el => {
@@ -87,8 +85,15 @@ const API_BASE = (() => {
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
   if (!navbar) return;
+  let isScrolling = false;
   window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 60);
+    if (!isScrolling) {
+      window.requestAnimationFrame(() => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+        isScrolling = false;
+      });
+      isScrolling = true;
+    }
   });
   if (hamburger && navLinks) {
     hamburger.addEventListener('click', () => {
