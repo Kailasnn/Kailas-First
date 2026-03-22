@@ -13,8 +13,8 @@ const API_BASE = (() => {
   if (host === 'localhost' || host === '127.0.0.1') {
     return 'http://localhost:5000';
   }
-  // Production — Vercel backend API (same domain via vercel.json rewrites)
-  return '';
+  // Production — Render backend API 
+  return 'https://kailas-first.onrender.com';
 })();
 
 // ──────────────────────────────────────────────────────
@@ -42,20 +42,20 @@ const API_BASE = (() => {
 // 2. CUSTOM CURSOR
 // ──────────────────────────────────────────────────────
 (function initCursor() {
-  const dot     = document.getElementById('cursorDot');
+  const dot = document.getElementById('cursorDot');
   const outline = document.getElementById('cursorOutline');
   if (!dot || !outline) return;
   let mouseX = 0, mouseY = 0, outX = 0, outY = 0;
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
     dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
+    dot.style.top = mouseY + 'px';
   });
   (function animateOutline() {
     outX += (mouseX - outX) * 0.12;
     outY += (mouseY - outY) * 0.12;
     outline.style.left = outX + 'px';
-    outline.style.top  = outY + 'px';
+    outline.style.top = outY + 'px';
     requestAnimationFrame(animateOutline);
   })();
   document.querySelectorAll('a, button, .achievement-card, .cert-item, .filter-btn').forEach(el => {
@@ -68,9 +68,9 @@ const API_BASE = (() => {
 // 3. NAVBAR SCROLL + HAMBURGER
 // ──────────────────────────────────────────────────────
 (function initNavbar() {
-  const navbar    = document.getElementById('navbar');
+  const navbar = document.getElementById('navbar');
   const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('navLinks');
+  const navLinks = document.getElementById('navLinks');
   if (!navbar) return;
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 60);
@@ -98,7 +98,7 @@ const API_BASE = (() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const el   = entry.target;
+      const el = entry.target;
       const delay = parseFloat(el.style.getPropertyValue('--delay') || '0');
       setTimeout(() => el.classList.add('revealed'), delay * 1000);
       observer.unobserve(el);
@@ -116,11 +116,11 @@ const API_BASE = (() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const el     = entry.target;
+      const el = entry.target;
       const target = parseInt(el.dataset.target || '0', 10);
-      let curr     = 0;
-      const step   = target / 55;
-      const timer  = setInterval(() => {
+      let curr = 0;
+      const step = target / 55;
+      const timer = setInterval(() => {
         curr += step;
         if (curr >= target) { curr = target; clearInterval(timer); }
         el.textContent = Math.floor(curr);
@@ -135,7 +135,7 @@ const API_BASE = (() => {
 // 6. ACHIEVEMENT FILTER
 // ──────────────────────────────────────────────────────
 (function initFilter() {
-  const btns  = document.querySelectorAll('.filter-btn');
+  const btns = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.achievement-card');
   if (!btns.length || !cards.length) return;
 
@@ -167,19 +167,19 @@ const API_BASE = (() => {
 // 7. CONTACT FORM
 // ──────────────────────────────────────────────────────
 (function initContactForm() {
-  const form       = document.getElementById('contactForm');
-  const submitBtn  = document.getElementById('submitBtn');
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
   const successDiv = document.getElementById('formSuccess');
-  const errorDiv   = document.getElementById('formError');
+  const errorDiv = document.getElementById('formError');
   const successMsg = document.getElementById('successMsg');
-  const errorMsg   = document.getElementById('errorMsg');
+  const errorMsg = document.getElementById('errorMsg');
 
   if (!form) return;
 
   // Helpers
   function showError(inputId, errorId, show) {
     const input = document.getElementById(inputId);
-    const err   = document.getElementById(errorId);
+    const err = document.getElementById(errorId);
     if (!input || !err) return;
     if (show) {
       input.classList.add('invalid');
@@ -264,9 +264,9 @@ const API_BASE = (() => {
     submitBtn.querySelector('i').className = 'fa-solid fa-spinner fa-spin';
 
     const payload = {
-      name:    document.getElementById('contactName').value.trim(),
-      age:     parseInt(document.getElementById('contactAge').value.trim(), 10),
-      gmail:   document.getElementById('contactGmail').value.trim(),
+      name: document.getElementById('contactName').value.trim(),
+      age: parseInt(document.getElementById('contactAge').value.trim(), 10),
+      gmail: document.getElementById('contactGmail').value.trim(),
       subject: document.getElementById('contactSubject').value.trim(),
       message: document.getElementById('contactMessage').value.trim(),
     };
@@ -313,7 +313,7 @@ const API_BASE = (() => {
 // 8. SMOOTH SCROLL
 // ──────────────────────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
+  anchor.addEventListener('click', function (e) {
     const id = this.getAttribute('href').slice(1);
     const target = document.getElementById(id);
     if (target) {
