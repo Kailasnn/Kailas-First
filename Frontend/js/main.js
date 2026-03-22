@@ -6,6 +6,24 @@
 'use strict';
 
 // ──────────────────────────────────────────────────────
+// 0. JS ACTIVE FLAG — must run first
+// Guards all opacity:0 reveal classes in CSS.
+// Without this, elements stay visible even if JS fails.
+// ──────────────────────────────────────────────────────
+document.body.classList.add('js-active');
+
+// ──────────────────────────────────────────────────────
+// SAFETY FALLBACK — reveal ALL hidden elements after 3s
+// Ensures content is always visible on Vercel/production
+// even if IntersectionObserver never fires.
+// ──────────────────────────────────────────────────────
+setTimeout(function revealFallback() {
+  document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right').forEach(function(el) {
+    el.classList.add('revealed');
+  });
+}, 3000);
+
+// ──────────────────────────────────────────────────────
 // 1. THREE.JS — 3D MUSIC SCENE
 // ──────────────────────────────────────────────────────
 (function initThreeJS() {
@@ -380,7 +398,7 @@
         observer.unobserve(el);
       }
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+  }, { threshold: 0.01, rootMargin: '0px 0px 0px 0px' });
 
   revealElements.forEach(el => observer.observe(el));
 })();

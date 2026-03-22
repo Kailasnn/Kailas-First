@@ -405,15 +405,24 @@ body:hover .cursor-outline { opacity: 1; }
 .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
 .section-desc { font-size: 1.05rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto; line-height: 1.6; }
 
-/* Reveal Animations */
-.reveal-up, .reveal-left, .reveal-right {
+/* Reveal Animations
+   IMPORTANT: opacity:0 is gated behind .js-active body class.
+   This ensures content is always visible even if JS fails on Vercel.
+   JS adds .js-active to body immediately on load. */
+.js-active .reveal-up,
+.js-active .reveal-left,
+.js-active .reveal-right {
   opacity: 0;
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
-.reveal-up { transform: translateY(50px); }
-.reveal-left { transform: translateX(-60px); }
-.reveal-right { transform: translateX(60px); }
-.revealed { opacity: 1; transform: translate(0); }
+.js-active .reveal-up    { transform: translateY(50px); }
+.js-active .reveal-left  { transform: translateX(-60px); }
+.js-active .reveal-right { transform: translateX(60px); }
+.js-active .revealed     { opacity: 1; transform: translate(0); }
+/* Non-js-active fallback: show everything */
+body:not(.js-active) .reveal-up,
+body:not(.js-active) .reveal-left,
+body:not(.js-active) .reveal-right { opacity: 1; transform: none; }
 
 /* ════════════════════════════════════════════════════════════
    JOURNEY / TIMELINE
