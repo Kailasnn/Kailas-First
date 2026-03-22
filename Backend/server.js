@@ -31,6 +31,7 @@ const allowedOrigins = [
   "http://localhost:5173", // Vite default (you missed this)
   "http://localhost:5500",
   "http://127.0.0.1:5500",
+  "https://kailasnn.github.io",
 ];
 
 app.use(
@@ -42,7 +43,7 @@ app.use(
         return callback(null, true);
       }
 
-      if (origin.includes("vercel.app")) {
+      if (origin.includes("vercel.app") || origin.includes("github.io")) {
         return callback(null, true);
       }
 

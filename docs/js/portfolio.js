@@ -23,14 +23,7 @@ setTimeout(function revealFallback() {
 // ──────────────────────────────────────────────────────
 // CONFIG — Update API URL after Vercel deployment
 // ──────────────────────────────────────────────────────
-const API_BASE = (() => {
-  const host = window.location.hostname;
-  if (host === 'localhost' || host === '127.0.0.1') {
-    return 'http://localhost:5000';
-  }
-  // Production — Render backend API 
-  return 'https://kailas-first.onrender.com';
-})();
+const API_BASE = 'https://kailas-first.onrender.com';
 
 // ──────────────────────────────────────────────────────
 // 1. FLOATING NOTES (DOM)
