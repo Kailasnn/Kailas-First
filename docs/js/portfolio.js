@@ -14,7 +14,7 @@ document.body.classList.add('js-active');
 // SAFETY FALLBACK — reveal ALL hidden elements after 3s
 // ──────────────────────────────────────────────────────
 setTimeout(function revealFallback() {
-  document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right').forEach(function(el) {
+  document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right').forEach(function (el) {
     el.classList.add('revealed');
   });
 }, 3000);
